@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      :root {
+        font-family: Inter, sans-serif;
+        font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+      }
+      @supports (font-variation-settings: normal) {
+        :root {
+          font-family: InterVariable, sans-serif;
+        }
+      }
+
+      body {
+        max-width: 500px;
+        margin: 48px auto;
+        padding-inline: 12px;
+      }
+
+      .container {
+        background-color: white;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border: 1px solid #344861;
+      }
+
+      .container > div {
+        border: 1px solid #344861;
+        aspect-ratio: 1;
+      }
+
+      .big {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .big > div {
+        border: 0.5px solid #344861;
+        aspect-ratio: 1;
+      }
+
+      .small {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2em;
+        font-weight: 350;
+        color: #344861;
+        user-select: none;
+      }
+
+      .inputs {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .inputs > p {
+        font-size: 2.5em;
+        color: #325aaf;
+        cursor: pointer;
+        font-weight: 350;
+        user-select: none;
+      }
+
+      .highlighted {
+        background-color: #e2ebf3;
+      }
+
+      .selected {
+        background-color: #bbdefb !important;
+      }
+
+      .incorrect {
+        color: #e55c6c;
+      }
+
+      .highlighted-number {
+        background-color: #c3d7ea;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sudoku</h1>
+    <div class="container">
+      <div class="big big-1">
+        <div class="small big-1-small-1 a-1">1</div>
+        <div class="small big-1-small-2 b-1">4</div>
+        <div class="small big-1-small-3 c-1">2</div>
+        <div class="small big-1-small-4 a-2"></div>
+        <div class="small big-1-small-5 b-2">7</div>
+        <div class="small big-1-small-6 c-2">6</div>
+        <div class="small big-1-small-7 a-3"></div>
+        <div class="small big-1-small-8 b-3"></div>
+        <div class="small big-1-small-9 c-3">9</div>
+      </div>
+      <div class="big big-2">
+        <div class="small big-2-small-1 d-1">6</div>
+        <div class="small big-2-small-2 e-1">3</div>
+        <div class="small big-2-small-3 f-1">7</div>
+        <div class="small big-2-small-4 d-2">5</div>
+        <div class="small big-2-small-5 e-2"></div>
+        <div class="small big-2-small-6 f-2">8</div>
+        <div class="small big-2-small-7 d-3"></div>
+        <div class="small big-2-small-8 e-3">1</div>
+        <div class="small big-2-small-9 f-3">4</div>
+      </div>
+      <div class="big big-3">
+        <div class="small big-3-small-1 g-1">9</div>
+        <div class="small big-3-small-2 h-1">3</div>
+        <div class="small big-3-small-3 i-1">5</div>
+        <div class="small big-3-small-4 g-2">4</div>
+        <div class="small big-3-small-5 h-2"></div>
+        <div class="small big-3-small-6 i-2">8</div>
+        <div class="small big-3-small-7 g-3"></div>
+        <div class="small big-3-small-8 h-3">1</div>
+        <div class="small big-3-small-9 i-3">6</div>
+      </div>
+      <div class="big big-4">
+        <div class="small big-4-small-1 a-4"></div>
+        <div class="small big-4-small-2 b-4">1</div>
+        <div class="small big-4-small-3 c-4">4</div>
+        <div class="small big-4-small-4 a-5">7</div>
+        <div class="small big-4-small-5 b-5">3</div>
+        <div class="small big-4-small-6 c-5">8</div>
+        <div class="small big-4-small-7 a-6">9</div>
+        <div class="small big-4-small-8 b-6">6</div>
+        <div class="small big-4-small-9 c-6"></div>
+      </div>
+      <div class="big big-5">
+        <div class="small big-5-small-1 d-4"></div>
+        <div class="small big-5-small-2 e-4">6</div>
+        <div class="small big-5-small-3 f-4">9</div>
+        <div class="small big-5-small-4 d-5">4</div>
+        <div class="small big-5-small-5 e-5">2</div>
+        <div class="small big-5-small-6 f-5"></div>
+        <div class="small big-5-small-7 d-6">8</div>
+        <div class="small big-5-small-8 e-6">7</div>
+        <div class="small big-5-small-9 f-6">1</div>
+      </div>
+      <div class="big big-6">
+        <div class="small big-6-small-1 g-4">8</div>
+        <div class="small big-6-small-2 h-4">7</div>
+        <div class="small big-6-small-3 i-4">5</div>
+        <div class="small big-6-small-4 g-5">1</div>
+        <div class="small big-6-small-5 h-5">9</div>
+        <div class="small big-6-small-6 i-5"></div>
+        <div class="small big-6-small-7 g-6">4</div>
+        <div class="small big-6-small-8 h-6"></div>
+        <div class="small big-6-small-9 i-6"></div>
+      </div>
+      <div class="big big-7">
+        <div class="small big-7-small-1 a-7"></div>
+        <div class="small big-7-small-2 b-7">5</div>
+        <div class="small big-7-small-3 c-7">1</div>
+        <div class="small big-7-small-4 a-8">4</div>
+        <div class="small big-7-small-5 b-8">2</div>
+        <div class="small big-7-small-6 c-8"></div>
+        <div class="small big-7-small-7 a-9">8</div>
+        <div class="small big-7-small-8 b-9"></div>
+        <div class="small big-7-small-9 c-9">7</div>
+      </div>
+      <div class="big big-8">
+        <div class="small big-8-small-1 d-7">7</div>
+        <div class="small big-8-small-2 e-7">4</div>
+        <div class="small big-8-small-3 f-7"></div>
+        <div class="small big-8-small-4 d-8">9</div>
+        <div class="small big-8-small-5 e-8"></div>
+        <div class="small big-8-small-6 f-8">6</div>
+        <div class="small big-8-small-7 d-9"></div>
+        <div class="small big-8-small-8 e-9">5</div>
+        <div class="small big-8-small-9 f-9">3</div>
+      </div>
+      <div class="big big-9">
+        <div class="small big-9-small-1 g-7">9</div>
+        <div class="small big-9-small-2 h-7">3</div>
+        <div class="small big-9-small-3 i-7"></div>
+        <div class="small big-9-small-4 g-8"></div>
+        <div class="small big-9-small-5 h-8"></div>
+        <div class="small big-9-small-6 i-8"></div>
+        <div class="small big-9-small-7 g-9">6</div>
+        <div class="small big-9-small-8 h-9">4</div>
+        <div class="small big-9-small-9 i-9">2</div>
+      </div>
+    </div>
+    <div class="inputs">
+      <p>1</p>
+      <p>2</p>
+      <p>3</p>
+      <p>4</p>
+      <p>5</p>
+      <p>6</p>
+      <p>7</p>
+      <p>8</p>
+      <p>9</p>
+    </div>
+    <script>
+      function generatePuzzle() {
+        const grid = [...Array(9)].map(() => Array(9).fill(0))
+
+        function backtrack(row, col) {
+          if (row === 9) return true // Solved the puzzle
+          if (col === 9) return backtrack(row + 1, 0)
+          if (grid[row][col] !== 0) return backtrack(row, col + 1)
+
+          const shuffledNumbers = Array.from(
+            { length: 9 },
+            (_, i) => i + 1
+          ).sort(() => Math.random() - 0.5)
+
+          for (const num of shuffledNumbers) {
+            if (isValidPlacement(row, col, num)) {
+              grid[row][col] = num
+              if (backtrack(row, col + 1)) return true
+              grid[row][col] = 0 // Backtrack
+            }
+          }
+          return false // No valid placement found
+        }
+
+        function isValidPlacement(row, col, num) {
+          for (let i = 0; i < 9; i++) {
+            if (
+              grid[row][i] === num ||
+              grid[i][col] === num ||
+              grid[Math.floor(row / 3) * 3 + Math.floor(i / 3)][
+                Math.floor(col / 3) * 3 + (i % 3)
+              ] === num
+            ) {
+              return false
+            }
+          }
+          return true
+        }
+
+        backtrack(0, 0)
+
+        // Create the big squares
+        const bigSquares = []
+        for (let i = 0; i < 9; i += 3) {
+          for (let j = 0; j < 9; j += 3) {
+            const square = []
+            for (let k = 0; k < 3; k++) {
+              for (let l = 0; l < 3; l++) {
+                square.push(grid[i + k][j + l])
+              }
+            }
+            bigSquares.push(square)
+          }
+        }
+
+        return bigSquares
+      }
+
+      function populateGrid(puzzle) {
+        const bigs = document.querySelectorAll('.big')
+        for (let i = 0; i < bigs.length; ++i) {
+          const smalls = bigs[i].children
+          for (let j = 0; j < smalls.length; ++j) {
+            smalls[j].innerHTML = puzzle[i][j]
+          }
+        }
+      }
+
+      function getPuzzle() {
+        const solvedPuzzle = generatePuzzle()
+        const randomIndexes = new Set()
+
+        const flatSolved = solvedPuzzle.flat()
+
+        while (randomIndexes.size < 30) {
+          randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
+        }
+        const flatPuzzle = flatSolved.map((value, index) =>
+          randomIndexes.has(index) ? null : value
+        )
+
+        const puzzle = []
+        for (let i = 0; i < 9; ++i) {
+          puzzle.push([])
+          const start = i * 9
+          const end = start + 9
+          const nine = flatPuzzle.slice(start, end)
+          puzzle[i] = nine
+        }
+
+        function createData() {
+          const smalls = document.querySelectorAll('.small')
+          const data = {}
+
+          for (let i = 0; i < smalls.length; ++i) {
+            const small = smalls[i]
+            const column = small.classList[2].split('-')[0]
+            const row = small.classList[2].split('-')[1]
+
+            data[`${column}-${row}`] = {
+              value: flatPuzzle[i],
+              answer: flatSolved[i],
+            }
+          }
+        }
+
+        createData()
+
+        return { puzzle, solvedPuzzle }
+      }
+
+      function resetStyles() {
+        const smalls = document.querySelectorAll('.small')
+        smalls.forEach((small) => {
+          small.classList.remove('selected')
+          small.classList.remove('highlighted')
+          small.classList.remove('highlighted-number')
+        })
+      }
+
+      function getAnswer(selectedSquare) {
+        const big = selectedSquare.classList[1].split('-')[1] - 1
+        const small = selectedSquare.classList[1].split('-')[3] - 1
+        const answer = solvedPuzzle[big][small]
+        return answer
+      }
+
+      function highlightGrid(selectedSquare) {
+        resetStyles()
+        const smalls = document.querySelectorAll('.small')
+
+        const selectedColumn = selectedSquare.classList[2].split('-')[0]
+        const selectedRow = selectedSquare.classList[2].split('-')[1]
+
+        const bigNumber = Number(selectedSquare.classList[1].split('-')[1])
+        const smallsInBig = document.querySelectorAll(`.big-${bigNumber} > div`)
+        smallsInBig.forEach((s) => s.classList.add('highlighted'))
+
+        const highlightedNumber = selectedSquare.innerHTML
+
+        smalls.forEach((s) => {
+          if (s.innerHTML === highlightedNumber && highlightedNumber !== '') {
+            s.classList.add('highlighted-number')
+          }
+
+          const column = s.classList[2].split('-')[0]
+          const row = s.classList[2].split('-')[1]
+
+          if (column === selectedColumn) {
+            s.classList.add('highlighted')
+          }
+          if (row === selectedRow) {
+            s.classList.add('highlighted')
+          }
+        })
+
+        selectedSquare.classList.add('selected')
+      }
+
+      function startGame() {
+        const smalls = document.querySelectorAll('.small')
+
+        smalls.forEach((small) => {
+          small.addEventListener('click', (e) => {
+            highlightGrid(e.target)
+
+            // For testing
+            const answer = getAnswer(e.target)
+            console.log(answer)
+          })
+        })
+      }
+
+      function handleInput() {
+        function processInput(userInput) {
+          const selectedSquare = document.querySelector('.selected')
+
+          if (selectedSquare.innerHTML !== '') {
+            return
+          }
+
+          selectedSquare.innerHTML = userInput
+          highlightGrid(selectedSquare)
+
+          const answer = getAnswer(selectedSquare)
+          if (userInput !== answer) {
+            selectedSquare.classList.add('incorrect')
+            console.log(`Correct answer is ${answer}`)
+          }
+
+          checkCompletion()
+        }
+
+        const inputs = document.querySelectorAll('.inputs > p')
+        inputs.forEach((input) => {
+          input.addEventListener('click', (e) => {
+            const userInput = Number(e.target.innerHTML)
+            processInput(userInput)
+          })
+        })
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key >= 1 && e.key <= 9) {
+            const userInput = Number(e.key)
+            processInput(userInput)
+          }
+        })
+      }
+
+      function checkCompletion() {
+        const smalls = document.querySelectorAll('.small')
+        const checker = []
+        smalls.forEach((s) => {
+          if (!s.classList.contains('incorrect') && s.innerHTML !== '') {
+            checker.push(true)
+          }
+        })
+        if (checker.length === 81) {
+          alert('you completed the puzzle')
+        }
+      }
+
+      const { puzzle, solvedPuzzle } = getPuzzle()
+      populateGrid(puzzle)
+      startGame()
+      handleInput()
+
+      // Undo is a lot better feature than having Erase
+      // I find myself using undo all the time when playing sudoku, but don't really use erase
+      // In order to have undo, I need to maintain a history of the sudoku grid, there should be a tight coupling of the data and the UI
+      // And when the data is reverted, the UI will be reverted automatically
+      // Have an array for tracking grid state
+      // Each element in the array represents the state of the grid at each step, index 0 being the initial state
+      // When a userInput is recorded, a new array is created and pushed onto the state array
+      // The board state at any given moment is history[history.length - 1], that is, the latest array in the history array
+      // When a undo action is triggered, the board's state will be the index before the current one, and the current one will be deleted, there is no redo
+      // If a person undoes their action, then performs a new action, the array resulting from the new action will be appended to the history array
+    </script>
+  </body>
+</html>
