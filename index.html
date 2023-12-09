@@ -263,19 +263,12 @@
         return bigSquares
       }
 
-      function populateGrid(data) {
-        for (const [className, info] of Object.entries(data)) {
-          const square = document.querySelector(`.${className}`)
-          square.innerHTML = info.value
-        }
-      }
-
       function getData() {
         const solvedPuzzle = generatePuzzle()
         const flatSolved = solvedPuzzle.flat()
 
         const randomIndexes = new Set()
-        while (randomIndexes.size < 30) {
+        while (randomIndexes.size < 3) {
           randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
         }
         const flatPuzzle = flatSolved.map((value, index) =>
@@ -297,6 +290,13 @@
         }
 
         return data
+      }
+
+      function populateGrid(data) {
+        for (const [className, info] of Object.entries(data)) {
+          const square = document.querySelector(`.${className}`)
+          square.innerHTML = info.value
+        }
       }
 
       function resetStyles() {
@@ -353,11 +353,12 @@
           small.addEventListener('click', (e) => {
             highlightGrid(e.target)
 
-            // For testing
             const answer = getAnswer(e.target)
             console.log(answer)
           })
         })
+
+        handleInput()
       }
 
       function handleInput() {
@@ -369,6 +370,9 @@
           }
 
           selectedSquare.innerHTML = userInput
+          const squareClass = selectedSquare.classList[2]
+          data[squareClass].value = userInput
+
           highlightGrid(selectedSquare)
 
           const answer = getAnswer(selectedSquare)
@@ -397,22 +401,23 @@
       }
 
       function checkCompletion() {
-        const smalls = document.querySelectorAll('.small')
-        const checker = []
-        smalls.forEach((s) => {
-          if (!s.classList.contains('incorrect') && s.innerHTML !== '') {
-            checker.push(true)
+        let allEqual = true
+        for (const key in data) {
+          const currentObject = data[key]
+          if (currentObject.value !== currentObject.answer) {
+            allEqual = false
+            break
           }
-        })
-        if (checker.length === 81) {
-          alert('you completed the puzzle')
+        }
+
+        if (allEqual) {
+          alert('YAY! You solved the puzzle!')
         }
       }
 
       const data = getData()
       populateGrid(data)
       startGame()
-      handleInput()
 
       // Undo is a lot better feature than having Erase
       // I find myself using undo all the time when playing sudoku, but don't really use erase
