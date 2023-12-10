@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://rsms.me/" />
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
-    <title>Document</title>
+    <title>Sudoku</title>
     <style>
       * {
         box-sizing: border-box;
@@ -337,7 +337,7 @@
         const flatSolved = solvedPuzzle.flat()
 
         const randomIndexes = new Set()
-        while (randomIndexes.size < 1) {
+        while (randomIndexes.size < 35) {
           randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
         }
         const flatPuzzle = flatSolved.map((value, index) =>
