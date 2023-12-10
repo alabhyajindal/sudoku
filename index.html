@@ -37,6 +37,20 @@
         border: 1px solid #344861;
       }
 
+      .container.completed {
+        background-color: royalblue;
+        border: 1px solid #fff;
+        border-radius: 2px;
+        padding: 24px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        transition-property: background-color;
+        transition-duration: 1s;
+        transition-timing-function: ease-in;
+      }
+
       .container > div {
         border: 1px solid #344861;
         aspect-ratio: 1;
@@ -113,14 +127,18 @@
         font-size: 1.5em;
       }
 
-      h1 {
+      .celebration {
+        display: none;
+      }
+
+      .title {
         color: #111;
       }
     </style>
   </head>
   <body>
     <div class="top-row">
-      <h1>Sudoku</h1>
+      <h1 class="title">Sudoku</h1>
       <div class="top-row-right">
         <svg
           class="undo"
@@ -252,6 +270,10 @@
       <p>9</p>
     </div>
 
+    <div class="celebration">
+      <h1>Congratulations</h1>
+    </div>
+
     <script>
       function generatePuzzle() {
         const grid = [...Array(9)].map(() => Array(9).fill(0))
@@ -315,7 +337,7 @@
         const flatSolved = solvedPuzzle.flat()
 
         const randomIndexes = new Set()
-        while (randomIndexes.size < 3) {
+        while (randomIndexes.size < 1) {
           randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
         }
         const flatPuzzle = flatSolved.map((value, index) =>
@@ -421,7 +443,6 @@
         })
 
         removeCompletedNumbers()
-        startTimer()
         const selectedSquare = document.querySelector('.a-1')
         highlightGrid(selectedSquare)
         handleInput()
@@ -517,7 +538,43 @@
       }
 
       function celebrateCompletion() {
-        alert('YAY! You solved the puzzle!')
+        const container = document.querySelector('.container')
+
+        const height = container.offsetHeight
+        const width = container.offsetWidth
+
+        const formattedTime = stopTimer()
+        const time = convertToHumanReadableTime(formattedTime)
+
+        const celebrationContent = document.querySelector('.celebration')
+        // const topRow = document.querySelector('.top-row')
+        // topRow.style.opacity = '0'
+
+        container.innerHTML = celebrationContent.innerHTML
+        container.style.height = `${height}px`
+        container.style.width = `${width}px`
+        container.classList.add('completed')
+      }
+
+      function convertToHumanReadableTime(timeString) {
+        if (!/^\d{2}:\d{2}$/.test(timeString)) {
+          throw new Error('Invalid time string format.')
+        }
+
+        const [minutes, seconds] = timeString.split(':').map(Number)
+
+        let output = ''
+        if (minutes > 0) {
+          output += minutes + (minutes === 1 ? ' minute' : ' minutes')
+        }
+        if (seconds > 0) {
+          output +=
+            (output.length > 0 ? ' and ' : '') +
+            seconds +
+            (seconds === 1 ? ' second' : ' seconds')
+        }
+
+        return output
       }
 
       function startTimer() {
@@ -525,12 +582,13 @@
         let startTime = Date.now()
         let elapsedTime = 0
         let intervalId
+        let formattedTime
 
         function updateTimerDisplay() {
           elapsedTime = Date.now() - startTime
           let minutes = Math.floor(elapsedTime / 1000 / 60)
           let seconds = Math.floor(elapsedTime / 1000) % 60
-          let formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
+          formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
             .toString()
             .padStart(2, '0')}`
           timerP.textContent = formattedTime
@@ -540,12 +598,13 @@
 
         return function stopTimer() {
           clearInterval(intervalId)
-          timerP.textContent = '00:00'
+          return formattedTime
         }
       }
 
       const history = getHistory()
       populateGrid()
+      const stopTimer = startTimer()
       startGame()
     </script>
   </body>
