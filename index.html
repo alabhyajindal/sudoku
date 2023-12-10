@@ -263,12 +263,12 @@
         return bigSquares
       }
 
-      function getData() {
+      function getHistory() {
         const solvedPuzzle = generatePuzzle()
         const flatSolved = solvedPuzzle.flat()
 
         const randomIndexes = new Set()
-        while (randomIndexes.size < 3) {
+        while (randomIndexes.size < 10) {
           randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
         }
         const flatPuzzle = flatSolved.map((value, index) =>
@@ -289,12 +289,25 @@
           }
         }
 
-        return data
+        const history = [data]
+
+        return history
       }
 
-      function populateGrid(data) {
+      function populateGrid() {
+        const data = history[history.length - 1]
+        if (!data) {
+          return
+        }
         for (const [className, info] of Object.entries(data)) {
           const square = document.querySelector(`.${className}`)
+
+          if (info.value && info.value !== info.answer) {
+            square.classList.add('incorrect')
+          } else {
+            square.classList.remove('incorrect')
+          }
+
           square.innerHTML = info.value
         }
       }
@@ -309,6 +322,8 @@
       }
 
       function getAnswer(selectedSquare) {
+        const data = history[history.length - 1]
+
         const squareClass = selectedSquare.classList[2]
         const answer = data[squareClass].answer
         return answer
@@ -363,23 +378,20 @@
 
       function handleInput() {
         function processInput(userInput) {
-          const selectedSquare = document.querySelector('.selected')
+          const data = history[history.length - 1]
 
-          if (selectedSquare.innerHTML !== '') {
+          const selectedSquare = document.querySelector('.selected')
+          const squareClass = selectedSquare.classList[2]
+
+          if (data[squareClass].value) {
             return
           }
 
-          selectedSquare.innerHTML = userInput
-          const squareClass = selectedSquare.classList[2]
-          data[squareClass].value = userInput
-
+          const newData = structuredClone(data)
+          newData[squareClass].value = userInput
+          history.push(newData)
+          populateGrid()
           highlightGrid(selectedSquare)
-
-          const answer = getAnswer(selectedSquare)
-          if (userInput !== answer) {
-            selectedSquare.classList.add('incorrect')
-            console.log(`Correct answer is ${answer}`)
-          }
 
           checkCompletion()
         }
@@ -396,11 +408,18 @@
           if (e.key >= 1 && e.key <= 9) {
             const userInput = Number(e.key)
             processInput(userInput)
+          } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
+            if (history.length > 1) {
+              history.pop()
+              populateGrid()
+            }
           }
         })
       }
 
       function checkCompletion() {
+        const data = history[history.length - 1]
+
         let allEqual = true
         for (const key in data) {
           const currentObject = data[key]
@@ -415,14 +434,10 @@
         }
       }
 
-      const data = getData()
-      populateGrid(data)
+      const history = getHistory()
+      populateGrid()
       startGame()
 
-      // Undo is a lot better feature than having Erase
-      // I find myself using undo all the time when playing sudoku, but don't really use erase
-      // In order to have undo, I need to maintain a history of the sudoku grid, there should be a tight coupling of the data and the UI
-      // And when the data is reverted, the UI will be reverted automatically
       // Have an array for tracking grid state
       // Each element in the array represents the state of the grid at each step, index 0 being the initial state
       // When a userInput is recorded, a new array is created and pushed onto the state array
