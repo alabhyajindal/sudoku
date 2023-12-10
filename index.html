@@ -79,28 +79,16 @@
       }
 
       .inputs {
-        margin-top: 24px;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .inputs-actions {
         display: flex;
         justify-content: space-evenly;
       }
 
-      .inputs-numbers {
-        display: flex;
-        justify-content: space-evenly;
-      }
-
-      .inputs-numbers > p {
+      .inputs > p {
         font-size: 2.5em;
         color: #325aaf;
         cursor: pointer;
         font-weight: 350;
         user-select: none;
-        margin-block: 12px;
       }
 
       .top-row {
@@ -253,17 +241,15 @@
       </div>
     </div>
     <div class="inputs">
-      <div class="inputs-numbers">
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
-        <p>4</p>
-        <p>5</p>
-        <p>6</p>
-        <p>7</p>
-        <p>8</p>
-        <p>9</p>
-      </div>
+      <p>1</p>
+      <p>2</p>
+      <p>3</p>
+      <p>4</p>
+      <p>5</p>
+      <p>6</p>
+      <p>7</p>
+      <p>8</p>
+      <p>9</p>
     </div>
 
     <script>
@@ -329,7 +315,7 @@
         const flatSolved = solvedPuzzle.flat()
 
         const randomIndexes = new Set()
-        while (randomIndexes.size < 10) {
+        while (randomIndexes.size < 3) {
           randomIndexes.add(Math.floor(Math.random() * flatSolved.length))
         }
         const flatPuzzle = flatSolved.map((value, index) =>
@@ -434,7 +420,10 @@
           })
         })
 
+        removeCompletedNumbers()
         startTimer()
+        const selectedSquare = document.querySelector('.a-1')
+        highlightGrid(selectedSquare)
         handleInput()
       }
 
@@ -455,6 +444,7 @@
           populateGrid()
           highlightGrid(selectedSquare)
 
+          removeCompletedNumbers()
           checkCompletion()
         }
 
@@ -488,6 +478,27 @@
         })
       }
 
+      function removeCompletedNumbers() {
+        const inputs = document.querySelectorAll('.inputs > p')
+
+        const data = history[history.length - 1]
+        for (let i = 1; i <= 9; ++i) {
+          let count = 0
+          for (const [className, info] of Object.entries(data)) {
+            if (info.value === i && info.value === info.answer) {
+              count++
+            }
+          }
+          if (count === 9) {
+            inputs.forEach((input) => {
+              if (Number(input.innerHTML) === i) {
+                input.style.visibility = 'hidden'
+              }
+            })
+          }
+        }
+      }
+
       function checkCompletion() {
         const data = history[history.length - 1]
 
@@ -501,8 +512,12 @@
         }
 
         if (allEqual) {
-          alert('YAY! You solved the puzzle!')
+          celebrateCompletion()
         }
+      }
+
+      function celebrateCompletion() {
+        alert('YAY! You solved the puzzle!')
       }
 
       function startTimer() {
