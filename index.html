@@ -20,6 +20,7 @@
       @supports (font-variation-settings: normal) {
         :root {
           font-family: InterVariable, sans-serif;
+          font-feature-settings: 'tnum';
         }
       }
 
@@ -61,19 +62,6 @@
         user-select: none;
       }
 
-      .inputs {
-        display: flex;
-        justify-content: space-evenly;
-      }
-
-      .inputs > p {
-        font-size: 2.5em;
-        color: #325aaf;
-        cursor: pointer;
-        font-weight: 350;
-        user-select: none;
-      }
-
       .highlighted {
         background-color: #e2ebf3;
       }
@@ -89,10 +77,80 @@
       .highlighted-number {
         background-color: #c3d7ea;
       }
+
+      .inputs {
+        margin-top: 24px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .inputs-actions {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .inputs-numbers {
+        display: flex;
+        justify-content: space-evenly;
+      }
+
+      .inputs-numbers > p {
+        font-size: 2.5em;
+        color: #325aaf;
+        cursor: pointer;
+        font-weight: 350;
+        user-select: none;
+        margin-block: 12px;
+      }
+
+      .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .top-row-right {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+      }
+
+      .undo {
+        cursor: pointer;
+      }
+
+      .timer > p {
+        color: #94a3b7;
+        user-select: none;
+        font-size: 1.5em;
+      }
+
+      h1 {
+        color: #111;
+      }
     </style>
   </head>
   <body>
-    <h1>Sudoku</h1>
+    <div class="top-row">
+      <h1>Sudoku</h1>
+      <div class="top-row-right">
+        <svg
+          class="undo"
+          xmlns="http://www.w3.org/2000/svg"
+          width="28"
+          height="28"
+          fill="#325aaf"
+          viewBox="0 0 256 256"
+        >
+          <title>Undo (Ctrl+Z, U)</title>
+          <path
+            d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"
+          ></path>
+        </svg>
+        <div class="timer"><p>00:00</p></div>
+      </div>
+    </div>
+
     <div class="container">
       <div class="big big-1">
         <div class="small big-1-small-1 a-1"></div>
@@ -195,16 +253,19 @@
       </div>
     </div>
     <div class="inputs">
-      <p>1</p>
-      <p>2</p>
-      <p>3</p>
-      <p>4</p>
-      <p>5</p>
-      <p>6</p>
-      <p>7</p>
-      <p>8</p>
-      <p>9</p>
+      <div class="inputs-numbers">
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>4</p>
+        <p>5</p>
+        <p>6</p>
+        <p>7</p>
+        <p>8</p>
+        <p>9</p>
+      </div>
     </div>
+
     <script>
       function generatePuzzle() {
         const grid = [...Array(9)].map(() => Array(9).fill(0))
@@ -373,6 +434,7 @@
           })
         })
 
+        startTimer()
         handleInput()
       }
 
@@ -404,15 +466,24 @@
           })
         })
 
+        const undoButton = document.querySelector('.undo')
+        undoButton.addEventListener('click', (e) => {
+          undo()
+        })
+
+        function undo() {
+          if (history.length > 1) {
+            history.pop()
+            populateGrid()
+          }
+        }
+
         document.addEventListener('keydown', (e) => {
           if (e.key >= 1 && e.key <= 9) {
             const userInput = Number(e.key)
             processInput(userInput)
           } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
-            if (history.length > 1) {
-              history.pop()
-              populateGrid()
-            }
+            undo()
           }
         })
       }
@@ -434,16 +505,33 @@
         }
       }
 
+      function startTimer() {
+        const timerP = document.querySelector('.timer > p')
+        let startTime = Date.now()
+        let elapsedTime = 0
+        let intervalId
+
+        function updateTimerDisplay() {
+          elapsedTime = Date.now() - startTime
+          let minutes = Math.floor(elapsedTime / 1000 / 60)
+          let seconds = Math.floor(elapsedTime / 1000) % 60
+          let formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
+            .toString()
+            .padStart(2, '0')}`
+          timerP.textContent = formattedTime
+        }
+
+        intervalId = setInterval(updateTimerDisplay, 1000)
+
+        return function stopTimer() {
+          clearInterval(intervalId)
+          timerP.textContent = '00:00'
+        }
+      }
+
       const history = getHistory()
       populateGrid()
       startGame()
-
-      // Have an array for tracking grid state
-      // Each element in the array represents the state of the grid at each step, index 0 being the initial state
-      // When a userInput is recorded, a new array is created and pushed onto the state array
-      // The board state at any given moment is history[history.length - 1], that is, the latest array in the history array
-      // When a undo action is triggered, the board's state will be the index before the current one, and the current one will be deleted, there is no redo
-      // If a person undoes their action, then performs a new action, the array resulting from the new action will be appended to the history array
     </script>
   </body>
 </html>
