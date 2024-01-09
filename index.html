@@ -355,6 +355,7 @@
           data[`${column}-${row}`] = {
             value: flatPuzzle[i],
             answer: flatSolved[i],
+            preFilled: true ? flatPuzzle[i] === flatSolved[i] : false,
           }
         }
 
@@ -455,7 +456,7 @@
           const selectedSquare = document.querySelector('.selected')
           const squareClass = selectedSquare.classList[2]
 
-          if (data[squareClass].value) {
+          if (data[squareClass].preFilled) {
             return
           }
 
