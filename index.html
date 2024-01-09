@@ -495,19 +495,18 @@
           const selectedRow = selectedSquare.classList[2].split('-')[1]
 
           const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-
           let nextColumn, nextRow
 
-          if (key === 'ArrowDown') {
+          if (key === 'ArrowDown' || key === 'j') {
             nextColumn = selectedColumn
             nextRow = Number(selectedRow) + 1
-          } else if (key === 'ArrowUp') {
+          } else if (key === 'ArrowUp' || key === 'k') {
             nextColumn = selectedColumn
             nextRow = Number(selectedRow) - 1
-          } else if (key === 'ArrowLeft') {
+          } else if (key === 'ArrowLeft' || key === 'h') {
             nextColumn = columns[columns.indexOf(selectedColumn) - 1]
             nextRow = Number(selectedRow)
-          } else if (key === 'ArrowRight') {
+          } else if (key === 'ArrowRight' || key === 'l') {
             nextColumn = columns[columns.indexOf(selectedColumn) + 1]
             nextRow = Number(selectedRow)
           }
@@ -523,10 +522,18 @@
           } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
             undo()
           } else if (
-            e.key === 'ArrowDown' ||
-            e.key === 'ArrowUp' ||
-            e.key === 'ArrowRight' ||
-            e.key === 'ArrowLeft'
+            [
+              'ArrowDown',
+              'j',
+              'ArrowUp',
+              'k',
+              'ArrowLeft',
+              'h',
+              'ArrowRight',
+              'l',
+            ].includes(e.key) &&
+            !e.ctrlKey &&
+            !e.shiftKey
           ) {
             e.preventDefault()
             navigateGrid(e.key)
