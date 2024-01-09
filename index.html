@@ -489,12 +489,42 @@
           }
         }
 
+        function navigateGrid(e, key) {
+          let direction
+
+          switch (key) {
+            case 'ArrowUp':
+              direction = 'up'
+              break
+            case 'ArrowDown':
+              direction = 'down'
+              break
+            case 'ArrowRight':
+              direction = 'right'
+              break
+            case 'ArrowLeft':
+              direction = 'left'
+              break
+
+            default:
+              return
+          }
+
+          e.preventDefault()
+          console.log(direction)
+
+          const selectedSquare = document.querySelector('.selected')
+          console.log(selectedSquare)
+        }
+
         document.addEventListener('keydown', (e) => {
           if (e.key >= 1 && e.key <= 9) {
             const userInput = Number(e.key)
             processInput(userInput)
           } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
             undo()
+          } else {
+            navigateGrid(e, e.key)
           }
         })
       }
