@@ -531,6 +531,12 @@
                 nextRow = 1
               }
             }
+          } else if (key === '0') {
+            nextColumn = columns[0]
+            nextRow = Number(selectedRow)
+          } else if (key === '$') {
+            nextColumn = columns[columns.length - 1]
+            nextRow = Number(selectedRow)
           }
 
           const nextSquare = document.querySelector(`.${nextColumn}-${nextRow}`)
@@ -558,6 +564,8 @@
               'l',
               'G',
               'g',
+              '0',
+              '$',
             ].includes(e.key) &&
             !e.ctrlKey
           ) {
