@@ -522,6 +522,9 @@
           if (nextSquare) highlightGrid(nextSquare)
         }
 
+        let gCount = 0
+        let gTime
+
         document.addEventListener('keydown', (e) => {
           if (e.key >= 1 && e.key <= 9) {
             const userInput = Number(e.key)
@@ -544,6 +547,19 @@
           ) {
             e.preventDefault()
             navigateGrid(e.key)
+          } else if (e.key === 'G') {
+            console.log('move to bottom row, same column')
+          } else if (e.key === 'g') {
+            gCount++
+            if (gCount < 2) {
+              gTime = new Date().getTime()
+            } else if (gCount === 2) {
+              gCount = 0
+              currentTime = new Date().getTime()
+              if (currentTime - gTime < 700) {
+                console.log('move to top row, same column')
+              }
+            }
           }
         })
       }
