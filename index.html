@@ -38,16 +38,17 @@
       }
 
       .container.completed {
-        background-color: royalblue;
-        border: 1px solid #fff;
+        background-color: #bbdefb;
+        border: 1px solid #bbdefb;
         border-radius: 2px;
         padding: 24px;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        color: #fff;
+        color: #344861;
         transition-property: background-color;
-        transition-duration: 1s;
+        transition-duration: 0.5s;
         transition-timing-function: ease-in;
       }
 
@@ -272,7 +273,11 @@
     </div>
 
     <div class="celebration">
-      <h1>Congratulations</h1>
+      <h2>Congratulations</h2>
+      <p>
+        You completed the puzzle in
+        <strong><span id="celebration-time"></span></strong>!
+      </p>
     </div>
 
     <script>
@@ -588,11 +593,14 @@
         const width = container.offsetWidth
 
         const formattedTime = stopTimer()
-        const time = convertToHumanReadableTime(formattedTime)
+        const celebrationTime = getCelebrationTime(formattedTime)
 
         const celebrationContent = document.querySelector('.celebration')
-        // const topRow = document.querySelector('.top-row')
-        // topRow.style.opacity = '0'
+        const timeElem = document.getElementById('celebration-time')
+        timeElem.innerHTML = celebrationTime
+
+        const undoButton = document.querySelector('.undo')
+        undoButton.style.visibility = 'hidden'
 
         container.innerHTML = celebrationContent.innerHTML
         container.style.height = `${height}px`
@@ -600,25 +608,16 @@
         container.classList.add('completed')
       }
 
-      function convertToHumanReadableTime(timeString) {
-        if (!/^\d{2}:\d{2}$/.test(timeString)) {
-          throw new Error('Invalid time string format.')
-        }
-
+      function getCelebrationTime(timeString) {
         const [minutes, seconds] = timeString.split(':').map(Number)
 
-        let output = ''
         if (minutes > 0) {
-          output += minutes + (minutes === 1 ? ' minute' : ' minutes')
+          return `${minutes} minute${
+            minutes > 1 ? 's' : ''
+          }, ${seconds} second${seconds > 1 ? 's' : ''}`
+        } else {
+          return `${seconds} second${seconds > 1 ? 's' : ''}`
         }
-        if (seconds > 0) {
-          output +=
-            (output.length > 0 ? ' and ' : '') +
-            seconds +
-            (seconds === 1 ? ' second' : ' seconds')
-        }
-
-        return output
       }
 
       function startTimer() {
