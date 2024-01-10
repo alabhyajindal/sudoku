@@ -519,6 +519,18 @@
           } else if (key === 'G') {
             nextColumn = selectedColumn
             nextRow = 9
+          } else if (key === 'g') {
+            gCount++
+            if (gCount < 2) {
+              gTime = new Date().getTime()
+            } else if (gCount === 2) {
+              gCount = 0
+              currentTime = new Date().getTime()
+              if (currentTime - gTime < 700) {
+                nextColumn = selectedColumn
+                nextRow = 1
+              }
+            }
           }
 
           const nextSquare = document.querySelector(`.${nextColumn}-${nextRow}`)
@@ -545,22 +557,12 @@
               'ArrowRight',
               'l',
               'G',
+              'g',
             ].includes(e.key) &&
             !e.ctrlKey
           ) {
             e.preventDefault()
             navigateGrid(e.key)
-          } else if (e.key === 'g') {
-            gCount++
-            if (gCount < 2) {
-              gTime = new Date().getTime()
-            } else if (gCount === 2) {
-              gCount = 0
-              currentTime = new Date().getTime()
-              if (currentTime - gTime < 700) {
-                console.log('move to top row, same column')
-              }
-            }
           }
         })
       }
