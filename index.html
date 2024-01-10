@@ -516,6 +516,9 @@
           } else if (key === 'ArrowRight' || key === 'l') {
             nextColumn = columns[columns.indexOf(selectedColumn) + 1]
             nextRow = Number(selectedRow)
+          } else if (key === 'G') {
+            nextColumn = selectedColumn
+            nextRow = 9
           }
 
           const nextSquare = document.querySelector(`.${nextColumn}-${nextRow}`)
@@ -541,14 +544,12 @@
               'h',
               'ArrowRight',
               'l',
+              'G',
             ].includes(e.key) &&
-            !e.ctrlKey &&
-            !e.shiftKey
+            !e.ctrlKey
           ) {
             e.preventDefault()
             navigateGrid(e.key)
-          } else if (e.key === 'G') {
-            console.log('move to bottom row, same column')
           } else if (e.key === 'g') {
             gCount++
             if (gCount < 2) {
