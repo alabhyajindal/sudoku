@@ -3,6 +3,7 @@
 }
 
 :root {
+  --background-blue: #d6ebfd;
   --light-blue: #bbdefb;
   --dark-blue: #344861;
   --bright-blue: #325aaf;
@@ -26,7 +27,7 @@ body {
   max-width: 450px;
   margin: 48px auto;
   padding-inline: 12px;
-  background-color: var(--light-blue);
+  background-color: var(--background-blue);
 }
 
 .container {

@@ -1,3 +1,5 @@
+'use strict'
+
 function generatePuzzle() {
   const grid = [...Array(9)].map(() => Array(9).fill(0))
 
@@ -215,30 +217,35 @@ function handleInput() {
   function navigateGrid(key) {
     const selectedSquare = document.querySelector('.selected')
     const selectedColumn = selectedSquare.classList[2].split('-')[0]
-    const selectedRow = selectedSquare.classList[2].split('-')[1]
+    const selectedRow = Number(selectedSquare.classList[2].split('-')[1])
 
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
-    let nextColumn, nextRow
+    let nextColumn = selectedColumn
+    let nextRow = selectedRow
 
     const shortcutMap = {
       j: () => {
-        nextColumn = selectedColumn
         nextRow = Number(selectedRow) + 1
       },
       k: () => {
-        nextColumn = selectedColumn
         nextRow = Number(selectedRow) - 1
       },
       h: () => {
         nextColumn = columns[columns.indexOf(selectedColumn) - 1]
-        nextRow = Number(selectedRow)
       },
       l: () => {
         nextColumn = columns[columns.indexOf(selectedColumn) + 1]
-        nextRow = Number(selectedRow)
       },
       G: () => {
-        nextColumn = selectedColumn
+        nextRow = 9
+      },
+      H: () => {
+        nextRow = 1
+      },
+      M: () => {
+        nextRow = 5
+      },
+      L: () => {
         nextRow = 9
       },
       g: () => {
@@ -247,7 +254,7 @@ function handleInput() {
           gTime = new Date().getTime()
         } else if (gCount === 2) {
           gCount = 0
-          currentTime = new Date().getTime()
+          const currentTime = new Date().getTime()
           if (currentTime - gTime < 700) {
             nextColumn = selectedColumn
             nextRow = 1
@@ -264,7 +271,8 @@ function handleInput() {
       },
     }
 
-    if (shortcutMap[key]) shortcutMap[key]()
+    if (!shortcutMap[key]) return
+    shortcutMap[key]()
 
     const nextSquare = document.querySelector(`.${nextColumn}-${nextRow}`)
     if (nextSquare) highlightGrid(nextSquare)
@@ -277,12 +285,9 @@ function handleInput() {
     if (e.key >= 1 && e.key <= 9) {
       const userInput = Number(e.key)
       processInput(userInput)
-    } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
+    } else if (e.key === 'u') {
       undo()
-    } else if (
-      ['j', 'k', 'h', 'l', 'G', 'g', '0', '$'].includes(e.key) &&
-      !e.ctrlKey
-    ) {
+    } else if (!e.ctrlKey) {
       e.preventDefault()
       navigateGrid(e.key)
     }
