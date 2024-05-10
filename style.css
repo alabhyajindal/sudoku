@@ -2,21 +2,12 @@
   box-sizing: border-box;
 }
 
-:root {
-  font-family: Inter, sans-serif;
-  font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
-}
-@supports (font-variation-settings: normal) {
-  :root {
-    font-family: InterVariable, sans-serif;
-    font-feature-settings: 'tnum';
-  }
-}
-
 body {
   max-width: 450px;
   margin: 48px auto;
   padding-inline: 12px;
+  font-family: system-ui, sans-serif;
+  background-color: #bbdefb;
 }
 
 .container {
@@ -92,7 +83,7 @@ body {
   font-size: 2.5em;
   color: #325aaf;
   cursor: pointer;
-  font-weight: 350;
+  font-weight: 400;
   user-select: none;
 }
 
@@ -116,6 +107,7 @@ body {
   color: #94a3b7;
   user-select: none;
   font-size: 1.5em;
+  font-weight: 400;
 }
 
 .celebration {
