@@ -2,38 +2,49 @@
   box-sizing: border-box;
 }
 
+:root {
+  --light-blue: #bbdefb;
+  --dark-blue: #344861;
+  --bright-blue: #325aaf;
+  --incorrect-red: #e55c6c;
+  --title-black: #0f172a;
+  --highlighted-row: #e2ebf3;
+  --highlighted-number: #c3d7ea;
+  --timer-gray: #94a3b7;
+}
+
 body {
   max-width: 450px;
   margin: 48px auto;
   padding-inline: 12px;
   font-family: system-ui, sans-serif;
-  background-color: #bbdefb;
+  background-color: var(--light-blue);
 }
 
 .container {
   background-color: white;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  border: 1px solid #344861;
+  border: 1px solid var(--dark-blue);
 }
 
 .container.completed {
-  background-color: #bbdefb;
-  border: 1px solid #bbdefb;
+  background-color: var(--light-blue);
+  border: 1px solid var(--light-blue);
   border-radius: 2px;
   padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #344861;
+  color: var(--dark-blue);
   transition-property: background-color;
   transition-duration: 0.5s;
   transition-timing-function: ease-in;
 }
 
 .container > div {
-  border: 1px solid #344861;
+  border: 1px solid var(--dark-blue);
   aspect-ratio: 1;
 }
 
@@ -43,7 +54,7 @@ body {
 }
 
 .big > div {
-  border: 0.5px solid #344861;
+  border: 0.5px solid var(--dark-blue);
   aspect-ratio: 1;
 }
 
@@ -52,26 +63,26 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2em;
-  font-weight: 350;
-  color: #344861;
+  /* font-weight: 350; */
+  color: var(--dark-blue);
   user-select: none;
   min-height: 100%;
 }
 
 .highlighted {
-  background-color: #e2ebf3;
+  background-color: var(--highlighted-row);
 }
 
 .selected {
-  background-color: #bbdefb !important;
+  background-color: var(--light-blue) !important;
 }
 
 .incorrect {
-  color: #e55c6c;
+  color: var(--incorrect-red);
 }
 
 .highlighted-number {
-  background-color: #c3d7ea;
+  background-color: var(--highlighted-number);
 }
 
 .inputs {
@@ -81,7 +92,7 @@ body {
 
 .inputs > p {
   font-size: 2.5em;
-  color: #325aaf;
+  color: var(--bright-blue);
   cursor: pointer;
   font-weight: 400;
   user-select: none;
@@ -104,7 +115,7 @@ body {
 }
 
 .timer > p {
-  color: #94a3b7;
+  color: var(--timer-gray);
   user-select: none;
   font-size: 1.5em;
   font-weight: 400;
@@ -115,5 +126,6 @@ body {
 }
 
 .title {
-  color: #0f172a;
+  font-size: 1.6em;
+  color: var(--title-black);
 }
