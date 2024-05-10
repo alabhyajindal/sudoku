@@ -220,40 +220,51 @@ function handleInput() {
     const columns = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']
     let nextColumn, nextRow
 
-    if (key === 'ArrowDown' || key === 'j') {
-      nextColumn = selectedColumn
-      nextRow = Number(selectedRow) + 1
-    } else if (key === 'ArrowUp' || key === 'k') {
-      nextColumn = selectedColumn
-      nextRow = Number(selectedRow) - 1
-    } else if (key === 'ArrowLeft' || key === 'h') {
-      nextColumn = columns[columns.indexOf(selectedColumn) - 1]
-      nextRow = Number(selectedRow)
-    } else if (key === 'ArrowRight' || key === 'l') {
-      nextColumn = columns[columns.indexOf(selectedColumn) + 1]
-      nextRow = Number(selectedRow)
-    } else if (key === 'G') {
-      nextColumn = selectedColumn
-      nextRow = 9
-    } else if (key === 'g') {
-      gCount++
-      if (gCount < 2) {
-        gTime = new Date().getTime()
-      } else if (gCount === 2) {
-        gCount = 0
-        currentTime = new Date().getTime()
-        if (currentTime - gTime < 700) {
-          nextColumn = selectedColumn
-          nextRow = 1
+    const shortcutMap = {
+      j: () => {
+        nextColumn = selectedColumn
+        nextRow = Number(selectedRow) + 1
+      },
+      k: () => {
+        nextColumn = selectedColumn
+        nextRow = Number(selectedRow) - 1
+      },
+      h: () => {
+        nextColumn = columns[columns.indexOf(selectedColumn) - 1]
+        nextRow = Number(selectedRow)
+      },
+      l: () => {
+        nextColumn = columns[columns.indexOf(selectedColumn) + 1]
+        nextRow = Number(selectedRow)
+      },
+      G: () => {
+        nextColumn = selectedColumn
+        nextRow = 9
+      },
+      g: () => {
+        gCount++
+        if (gCount < 2) {
+          gTime = new Date().getTime()
+        } else if (gCount === 2) {
+          gCount = 0
+          currentTime = new Date().getTime()
+          if (currentTime - gTime < 700) {
+            nextColumn = selectedColumn
+            nextRow = 1
+          }
         }
-      }
-    } else if (key === '0') {
-      nextColumn = columns[0]
-      nextRow = Number(selectedRow)
-    } else if (key === '$') {
-      nextColumn = columns[columns.length - 1]
-      nextRow = Number(selectedRow)
+      },
+      0: () => {
+        nextColumn = columns[0]
+        nextRow = Number(selectedRow)
+      },
+      $: () => {
+        nextColumn = columns[columns.length - 1]
+        nextRow = Number(selectedRow)
+      },
     }
+
+    if (shortcutMap[key]) shortcutMap[key]()
 
     const nextSquare = document.querySelector(`.${nextColumn}-${nextRow}`)
     if (nextSquare) highlightGrid(nextSquare)
@@ -269,20 +280,7 @@ function handleInput() {
     } else if ((e.ctrlKey && e.key === 'z') || e.key === 'u') {
       undo()
     } else if (
-      [
-        'ArrowDown',
-        'j',
-        'ArrowUp',
-        'k',
-        'ArrowLeft',
-        'h',
-        'ArrowRight',
-        'l',
-        'G',
-        'g',
-        '0',
-        '$',
-      ].includes(e.key) &&
+      ['j', 'k', 'h', 'l', 'G', 'g', '0', '$'].includes(e.key) &&
       !e.ctrlKey
     ) {
       e.preventDefault()
