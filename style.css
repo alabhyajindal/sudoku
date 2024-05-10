@@ -119,10 +119,6 @@ body {
   gap: 1em;
 }
 
-.undo {
-  cursor: pointer;
-}
-
 .timer > p {
   color: var(--timer-gray);
   user-select: none;

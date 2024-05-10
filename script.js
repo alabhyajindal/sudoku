@@ -202,11 +202,6 @@ function handleInput() {
     })
   })
 
-  const undoButton = document.querySelector('.undo')
-  undoButton.addEventListener('click', (e) => {
-    undo()
-  })
-
   function undo() {
     if (history.length > 1) {
       history.pop()
