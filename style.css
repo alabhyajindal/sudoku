@@ -1,0 +1,127 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: Inter, sans-serif;
+  font-feature-settings: 'liga' 1, 'calt' 1; /* fix for Chrome */
+}
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: InterVariable, sans-serif;
+    font-feature-settings: 'tnum';
+  }
+}
+
+body {
+  max-width: 450px;
+  margin: 48px auto;
+  padding-inline: 12px;
+}
+
+.container {
+  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #344861;
+}
+
+.container.completed {
+  background-color: #bbdefb;
+  border: 1px solid #bbdefb;
+  border-radius: 2px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #344861;
+  transition-property: background-color;
+  transition-duration: 0.5s;
+  transition-timing-function: ease-in;
+}
+
+.container > div {
+  border: 1px solid #344861;
+  aspect-ratio: 1;
+}
+
+.big {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.big > div {
+  border: 0.5px solid #344861;
+  aspect-ratio: 1;
+}
+
+.small {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  font-weight: 350;
+  color: #344861;
+  user-select: none;
+  min-height: 100%;
+}
+
+.highlighted {
+  background-color: #e2ebf3;
+}
+
+.selected {
+  background-color: #bbdefb !important;
+}
+
+.incorrect {
+  color: #e55c6c;
+}
+
+.highlighted-number {
+  background-color: #c3d7ea;
+}
+
+.inputs {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.inputs > p {
+  font-size: 2.5em;
+  color: #325aaf;
+  cursor: pointer;
+  font-weight: 350;
+  user-select: none;
+}
+
+.top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-row-right {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.undo {
+  cursor: pointer;
+}
+
+.timer > p {
+  color: #94a3b7;
+  user-select: none;
+  font-size: 1.5em;
+}
+
+.celebration {
+  display: none;
+}
+
+.title {
+  color: #0f172a;
+}
