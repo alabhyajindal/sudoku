@@ -11,13 +11,21 @@
   --highlighted-row: #e2ebf3;
   --highlighted-number: #c3d7ea;
   --timer-gray: #94a3b7;
+
+  font-family: Inter, sans-serif;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+@supports (font-variation-settings: normal) {
+  :root {
+    font-family: InterVariable, sans-serif;
+  }
 }
 
 body {
   max-width: 450px;
   margin: 48px auto;
   padding-inline: 12px;
-  font-family: system-ui, sans-serif;
   background-color: var(--light-blue);
 }
 
@@ -63,7 +71,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2em;
-  /* font-weight: 350; */
+  font-weight: 350;
   color: var(--dark-blue);
   user-select: none;
   min-height: 100%;
